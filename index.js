@@ -45,14 +45,18 @@ function addNumberToScreen(e) {
 
 function isOperator(e) {
   if (firstNum !== "" && secondNum !== "") {
-    display.textContent = roundToDecimal(operate(operator, parseFloat(firstNum), parseFloat(secondNum)));
+    display.textContent = roundToDecimal(
+      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
+    );
     firstNum = display.textContent;
     display.textContent = "";
     secondNum = "";
     operator = "";
   } else if (firstNum !== "" && operator !== "") {
     secondNum = display.textContent;
-    display.textContent = roundToDecimal(operate(operator, parseFloat(firstNum), parseFloat(secondNum)));
+    display.textContent = roundToDecimal(
+      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
+    );
     firstNum = display.textContent;
     secondNum = "";
     operator = e;
@@ -67,13 +71,13 @@ function result() {
   secondNum = display.textContent;
   if (operator === "/" && secondNum === "0") {
     clearAll();
-
   } else {
-    display.textContent = roundToDecimal(operate(operator, parseFloat(firstNum), parseFloat(secondNum)));
+    display.textContent = roundToDecimal(
+      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
+    );
     firstNum = display.textContent;
     secondNum = "";
     operator = "";
-
   }
 }
 
@@ -86,7 +90,7 @@ function clearAll() {
 
 function isDecimal(e) {
   // Check if the button clicked is a decimal
-  if (display.textContent.includes('.')) return;
+  if (display.textContent.includes(".")) return;
   display.textContent += e.target.value;
 }
 
@@ -113,6 +117,6 @@ operators.forEach((button) => {
 
 equals.addEventListener("click", result);
 
-clearBtn.addEventListener('click', clearAll);
+clearBtn.addEventListener("click", clearAll);
 
-decimal.addEventListener('click', isDecimal);
+decimal.addEventListener("click", isDecimal);
