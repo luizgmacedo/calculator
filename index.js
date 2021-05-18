@@ -1,24 +1,32 @@
 const numbers = document.querySelectorAll(".number");
-const decimal = document.querySelector(".decimal");
 const operators = document.querySelectorAll(".operator");
-const equals = document.querySelector(".equals");
-const display = document.querySelector(".display");
-const clearBtn = document.querySelector(".clear");
+const display = document.querySelector(".result");
+const allClearBtn = document.querySelector(".ac");
+const clearBtn = document.querySelector('.clear');
+const equalsBtn = document.querySelector(".equals");
+const decimalBtn = document.querySelector('.decimal');
 
-let firstNum = "";
-let secondNum = "";
-let operator = "";
+let result = null;
+let firstNum = null;
+let secondNum = null;
+let currentOperator = null;
 
-// Operations
-const add = (a, b) => a + b;
+function add(a, b) {
+  return a + b;
+}
 
-const subtract = (a, b) => a - b;
+function subtract(a, b) {
+  return a - b;
+}
 
-const multiply = (a, b) => a * b;
+function multiply(a, b) {
+  return a * b;
+}
 
-const divide = (a, b) => a / b;
+function divide(a, b) {
+  return a / b;
+}
 
-//Operate
 function operate(operator, a, b) {
   switch (operator) {
     case "+":
@@ -32,91 +40,130 @@ function operate(operator, a, b) {
   }
 }
 
-function addNumberToScreen(e) {
-  if (display.textContent === firstNum && secondNum === "") {
-    display.textContent = "";
-  }
-  if (display.textContent !== "0") {
-    display.textContent += e;
+numbers.forEach((number) => {
+  number.addEventListener("click", (e) => {
+    setNumber(e.target.value);
+  });
+});
+
+operators.forEach((operator) => {
+  operator.addEventListener("click", (e) => {
+    setOperator(e.target.value);
+    if (e.target.value == '/' && display.textContent == '0') {
+      alert("Can't divide by 0");
+      clearAll();
+      return false;
+    }
+  });
+});
+
+allClearBtn.addEventListener("click", clearAll);
+
+equalsBtn.addEventListener("click", () => {
+  if (display.textContent && firstNum && currentOperator) {
+    displayResult();
+
+    operators.forEach((operator) => {
+      operator.disabled = true;
+      operator.style.opacity = '0.5';
+    });
+
+    equalsBtn.classList.add("clicked");
   } else {
-    display.textContent = e;
+    return;
   }
-}
+});
 
-function isOperator(e) {
-  if (firstNum !== "" && secondNum !== "") {
-    display.textContent = roundToDecimal(
-      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
-    );
-    firstNum = display.textContent;
-    display.textContent = "";
-    secondNum = "";
-    operator = "";
-  } else if (firstNum !== "" && operator !== "") {
-    secondNum = display.textContent;
-    display.textContent = roundToDecimal(
-      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
-    );
-    firstNum = display.textContent;
-    secondNum = "";
-    operator = e;
-  } else if (firstNum === "") {
-    firstNum = display.textContent;
-    operator = e;
-    display.textContent = "";
-  }
-}
+decimalBtn.addEventListener('click', isDecimal);
 
-function result() {
-  secondNum = display.textContent;
-  if (operator === "/" && secondNum === "0") {
+clearBtn.addEventListener('click', backSpace);
+
+window.addEventListener('keydown', keyPressed);
+
+
+function setNumber(e) {
+  if (equalsBtn.classList.contains("clicked")) {
     clearAll();
-  } else {
-    display.textContent = roundToDecimal(
-      operate(operator, parseFloat(firstNum), parseFloat(secondNum))
-    );
+
+    operators.forEach((operator) => {
+      operator.disabled = false;
+      operator.style.opacity = '1';
+    });
+
+    equalsBtn.classList.remove("clicked");
+  }
+  if (display.textContent.length > 12) return;
+  if (display.textContent && currentOperator && firstNum && secondNum) {
     firstNum = display.textContent;
-    secondNum = "";
-    operator = "";
+    display.textContent = "";
+  }
+  if (!display.textContent) display.textContent = e;
+  else display.textContent += e;
+}
+
+function setOperator(e) {
+  if (equalsBtn.classList.contains("clicked")) {
+    return;
+  }
+  if (display.textContent && !currentOperator) {
+    currentOperator = e;
+    firstNum = display.textContent;
+    display.textContent = "";
+  }
+  if (display.textContent && firstNum && currentOperator) {
+    displayResult(e);
   }
 }
 
 function clearAll() {
-  display.textContent = "0";
-  firstNum = "";
-  secondNum = "";
-  operator = "";
-}
+  display.textContent = "";
+  result = null;
+  firstNum = null;
+  secondNum = null;
+  currentOperator = null;
 
-function isDecimal(e) {
-  // Check if the button clicked is a decimal
-  if (display.textContent.includes(".")) return;
-  display.textContent += e.target.value;
-}
-
-function roundToDecimal(e) {
-  e *= 100000;
-  e = Math.round(e);
-  return e / 100000;
-}
-
-//DOM
-numbers.forEach((number) => {
-  number.addEventListener("click", (e) => {
-    const clickedNum = e.target.value;
-    addNumberToScreen(clickedNum);
+  operators.forEach((operator) => {
+    operator.disabled = false;
+    operator.style.opacity = '1';
   });
-});
+}
 
-operators.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const operator = e.target.value;
-    isOperator(operator);
-  });
-});
+function displayResult(e) {
+  secondNum = display.textContent;
+  if (currentOperator == '/' && display.textContent == '0') {
+    alert("Can't divide by 0");
+    clearAll();
+    return false;
+  }
+  result = operate(currentOperator, Number(firstNum), Number(secondNum));
+  currentOperator = e;
+  if (Array.from(String(result)).length > 10) {
+    display.textContent = result.toPrecision(10);
+  } else {
+    display.textContent = result;
+  }
+  firstNum = display.textContent;
+}
 
-equals.addEventListener("click", result);
+function isDecimal() {
+  if (display.textContent.includes('.') || display.textContent == "") {
+    return;
+  } 
+  else display.textContent += '.';
+}
 
-clearBtn.addEventListener("click", clearAll);
+function backSpace() {
+  display.textContent = display.textContent.slice(0, display.textContent.length - 1);
+}
 
-decimal.addEventListener("click", isDecimal);
+function keyPressed(e) {
+  if (e.key >= 0 && e.key <= 9) setNumber(e.key);
+  if (e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/') setOperator(e.key);
+  if (e.key == '.') isDecimal(e.key);
+  if (firstNum != null && display.textContent != "" && e.key == '=' || e.key == 'Enter') {
+    displayResult();
+    equalsBtn.classList.add('clicked');
+  };
+  if (e.key == 'Backspace') backSpace();
+  if (e.key == 'Escape') clearAll();
+}

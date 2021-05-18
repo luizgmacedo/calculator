@@ -2,40 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap"
+      rel="stylesheet"/>
   </head>
   <body>
+    <div class="container">
+      <h1>Calculator</h1>
       <div class="calculator">
-      <div class="display">0</div> 
-      <div class="buttons">
-        <button class="clear" value="ac">AC</button>
+        <div class="result"></div>
+        <div class="numbers">
+          <button class="ac">AC</button>
+          <button class="clear">C</button>
+          <button disabled class="disabled"></button>
+          <button class="operator" value="/">&divide;</button>
+          <button class="number" value="9">9</button>
+          <button class="number" value="8">8</button>
+          <button class="number" value="7">7</button>
+          <button class="operator" value="*">&times;</button>
+          <button class="number" value="6">6</button>
+          <button class="number" value="5">5</button>
+          <button class="number" value="4">4</button>
+          <button class="operator" value="-">&minus;</button>
+          <button class="number" value="3">3</button>
+          <button class="number" value="2">2</button>
+          <button class="number" value="1">1</button>
+          <button class="operator" value="+">&plus;</button>
+          <button disabled class="disabled"></button>
+          <button class="number" value="0">0</button>
+          <button class="decimal" value=".">.</button>
 
-        <div class="span"></div>
-        <button class="operator" value="/">&divide;</button>
-
-        <button class="number" value="7">7</button>
-        <button class="number" value="8">8</button>
-        <button class="number" value="9">9</button>
-        <button class="operator" value="*">&times;</button>
-
-        <button class="number" value="4">4</button>
-        <button class="number" value="5">5</button>
-        <button class="number" value="6">6</button>
-        <button class="operator" value="+">&plus;</button>
-
-        <button class="number" value="1">1</button>
-        <button class="number" value="2">2</button>
-        <button class="number" value="3">3</button>
-        <button class="operator" value="-">&minus;</button>
-
-        <button class="number" value="0">0</button>
-        <button class="decimal" value=".">.</button>
-        <div class="span-number"></div>
-
-        <button class="equals" value="=">&equals;</button>
+          <button class="equals" value="=">&equals;</button>
+        </div>
       </div>
     </div>
 
